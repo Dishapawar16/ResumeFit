@@ -1,7 +1,7 @@
 
 import './ResumeBuilder.css'
 import { useState } from 'react'
-import { buildResumePayload } from './utils/resumePayload'
+import { buildResumePayload } from './resumePayload'
 
 function ResumeBuilder() {
   const [step, setStep] = useState(1)
