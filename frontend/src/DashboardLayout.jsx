@@ -1,4 +1,4 @@
-import { NavLink, Link, Outlet } from 'react-router-dom'
+import { NavLink, Link, Outlet, useNavigate } from 'react-router-dom'
 import './DashboardLayout.css'
 
 const menuItems = [
@@ -11,6 +11,14 @@ const menuItems = [
 ]
 
 function DashboardLayout() {
+  const navigate = useNavigate()
+  const user = JSON.parse(localStorage.getItem('resumefitUser') || 'null')
+
+  const handleLogout = () => {
+    localStorage.removeItem('resumefitUser')
+    navigate('/login')
+  }
+
   return (
     <div className="dash-layout">
       <aside className="sidebar">
@@ -34,6 +42,17 @@ function DashboardLayout() {
             </NavLink>
           ))}
         </nav>
+
+        <div className="sidebar-user">
+          <span className="sidebar-user-name">{user?.fullName}</span>
+          <button
+            type="button"
+            className="logout-button"
+            onClick={handleLogout}
+          >
+            Log out
+          </button>
+        </div>
       </aside>
 
       <main className="dash-content">

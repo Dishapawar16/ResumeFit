@@ -807,3 +807,19 @@ a {
     transition-duration: 0.01ms !important;
   }
 }
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.nav-login {
+  color: #6d776e;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nav-login:hover {
+  color: #244b38;
+}

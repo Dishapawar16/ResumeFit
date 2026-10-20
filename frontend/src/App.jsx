@@ -3,7 +3,8 @@ import LandingPage from './LandingPage'
 import ResumeBuilder from './ResumeBuilder'
 import DashboardLayout from './DashboardLayout'
 import HomePage from './HomePage'
-
+import AuthPage from './AuthPage'
+import ProtectedRoute from './ProtectedRoute'
 function PlaceholderPage({ title }) {
   return (
     <div>
@@ -19,8 +20,17 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/builder" element={<ResumeBuilder />} />
+        <Route path="/login" element={<AuthPage mode="login" />} />
+        <Route path="/register" element={<AuthPage mode="register" />} />
 
-        <Route path="/app" element={<DashboardLayout />}>
+        <Route
+          path="/app"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+          >
           <Route index element={<HomePage />} />
           <Route path="analyser" element={<PlaceholderPage title="Resume Analyser" />} />
           <Route path="resumes" element={<PlaceholderPage title="My Resumes" />} />

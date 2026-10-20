@@ -1,6 +1,5 @@
 import './App.css'
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate, Link } from 'react-router-dom'
 function LandingPage() {
   const navigate = useNavigate()
   
@@ -18,9 +17,14 @@ function LandingPage() {
           <a href="#about">About</a>
         </div>
 
-        <a className="nav-button" href="#get-started">
-          Get Started <span>↗</span>
-        </a>
+        <div className="nav-actions">
+          <Link className="nav-login" to="/login">
+            Log in
+          </Link>
+          <Link className="nav-button" to="/register">
+            Sign up <span>↗</span>
+          </Link>
+        </div>
       </nav>
 
       <main>
