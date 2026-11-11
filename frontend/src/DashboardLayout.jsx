@@ -15,7 +15,7 @@ function DashboardLayout() {
   const user = JSON.parse(localStorage.getItem('resumefitUser') || 'null')
 
   const handleLogout = () => {
-    localStorage.removeItem('resumefitUser')
+    localStorage.removeItem('resumefitToken')
     navigate('/login')
   }
 

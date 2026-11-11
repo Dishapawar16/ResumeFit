@@ -1,9 +1,10 @@
 import sqlite3
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, g, jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import get_connection
+from security import create_token, token_required
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
@@ -55,6 +56,31 @@ def login():
 
     if user is None or not check_password_hash(user["password_hash"], password):
         return error("Invalid email or password.", 401)
+
+    return jsonify(
+        {
+            "status": "success",
+            "token": create_token(user["id"]),
+            "user": {
+                "id": user["id"],
+                "fullName": user["full_name"],
+                "email": user["email"],
+            },
+        }
+    )
+
+
+@auth_bp.route("/me")
+@token_required
+def me():
+    conn = get_connection()
+    user = conn.execute(
+        "SELECT id, full_name, email FROM users WHERE id = ?", (g.user_id,)
+    ).fetchone()
+    conn.close()
+
+    if user is None:
+        return error("User not found.", 404)
 
     return jsonify(
         {

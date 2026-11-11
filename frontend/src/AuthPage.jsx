@@ -39,6 +39,7 @@ function AuthPage({ mode }) {
 
       if (isLogin) {
         localStorage.setItem('resumefitUser', JSON.stringify(data.user))
+        localStorage.setItem('resumefitToken', data.token)
         navigate('/app')
       } else {
         navigate('/login', { state: { registered: true } })
