@@ -1,9 +1,14 @@
-
 import './ResumeBuilder.css'
 import { useState } from 'react'
 import { buildResumePayload } from './utils/resumePayload'
+
+const API = 'http://127.0.0.1:5000/api/resumes'
+
 function ResumeBuilder() {
   const [step, setStep] = useState(1)
+  const [saving, setSaving] = useState(false)
+  const [saveMessage, setSaveMessage] = useState('')
+  const [saveError, setSaveError] = useState('')
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -24,24 +29,54 @@ function ResumeBuilder() {
 
   const updateField = (event) => {
     const { name, value } = event.target
-
-    setFormData((previous) => ({
-      ...previous,
-      [name]: value,
-    }))
+    setFormData((previous) => ({ ...previous, [name]: value }))
   }
 
-const handleContinue = (event) => {
-  event.preventDefault()
+  const saveResume = async (payload) => {
+    const token = localStorage.getItem('resumefitToken')
+    const title = payload.personal.fullName
+      ? `${payload.personal.fullName}'s Resume`
+      : 'Untitled resume'
 
-  if (step < 4) {
-    setStep((current) => current + 1)
-    return
+    setSaving(true)
+    setSaveError('')
+    setSaveMessage('')
+
+    try {
+      const response = await fetch(API, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title, content: payload }),
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        setSaveError(data.message || 'Could not save the resume.')
+        return
+      }
+
+      setSaveMessage('Resume saved successfully.')
+    } catch {
+      setSaveError('Cannot reach the server. Is the backend running?')
+    } finally {
+      setSaving(false)
+    }
   }
 
-  const payload = buildResumePayload(formData)
-  console.log('Resume payload:', payload)
-}
+  const handleContinue = (event) => {
+    event.preventDefault()
+
+    if (step < 4) {
+      setStep((current) => current + 1)
+      return
+    }
+
+    saveResume(buildResumePayload(formData))
+  }
+
   const handleBack = () => {
     setStep((current) => Math.max(current - 1, 1))
   }
@@ -67,12 +102,8 @@ const handleContinue = (event) => {
 
       <main className="builder-main">
         <div className="builder-intro">
-          <span className="builder-label">
-            YOUR CAREER, YOUR STORY
-          </span>
-
+          <span className="builder-label">YOUR CAREER, YOUR STORY</span>
           <h1>Let's build your resume.</h1>
-
           <p>
             Start with the basics. Add your details, education,
             experience, and skills to create your professional resume.
@@ -82,10 +113,7 @@ const handleContinue = (event) => {
         <section className="form-card">
           <div className="form-card-heading">
             <div>
-              <span className="step-label">
-                STEP 0{step}
-              </span>
-
+              <span className="step-label">STEP 0{step}</span>
               <h2>
                 {step === 1 && 'Personal information'}
                 {step === 2 && 'Education'}
@@ -95,9 +123,7 @@ const handleContinue = (event) => {
             </div>
 
             {step === 1 && (
-              <span className="required-note">
-                * Required fields
-              </span>
+              <span className="required-note">* Required fields</span>
             )}
           </div>
 
@@ -153,20 +179,14 @@ const handleContinue = (event) => {
                 </div>
 
                 <div className="form-field full-width">
-                  <label htmlFor="summary">
-                    Professional summary
-                  </label>
-
+                  <label htmlFor="summary">Professional summary</label>
                   <textarea
                     id="summary"
                     {...inputProps('summary')}
                     rows="4"
                     placeholder="Write a short introduction about yourself..."
                   />
-
-                  <span className="field-hint">
-                    You can improve this later.
-                  </span>
+                  <span className="field-hint">You can improve this later.</span>
                 </div>
               </div>
             )}
@@ -174,10 +194,7 @@ const handleContinue = (event) => {
             {step === 2 && (
               <div className="form-grid">
                 <div className="form-field">
-                  <label htmlFor="college">
-                    College / University *
-                  </label>
-
+                  <label htmlFor="college">College / University *</label>
                   <input
                     id="college"
                     {...inputProps('college')}
@@ -188,7 +205,6 @@ const handleContinue = (event) => {
 
                 <div className="form-field">
                   <label htmlFor="degree">Degree / Course *</label>
-
                   <input
                     id="degree"
                     {...inputProps('degree')}
@@ -198,10 +214,7 @@ const handleContinue = (event) => {
                 </div>
 
                 <div className="form-field">
-                  <label htmlFor="fieldOfStudy">
-                    Field of study
-                  </label>
-
+                  <label htmlFor="fieldOfStudy">Field of study</label>
                   <input
                     id="fieldOfStudy"
                     {...inputProps('fieldOfStudy')}
@@ -210,10 +223,7 @@ const handleContinue = (event) => {
                 </div>
 
                 <div className="form-field">
-                  <label htmlFor="graduationYear">
-                    Graduation year
-                  </label>
-
+                  <label htmlFor="graduationYear">Graduation year</label>
                   <input
                     id="graduationYear"
                     type="number"
@@ -227,10 +237,7 @@ const handleContinue = (event) => {
             {step === 3 && (
               <div className="form-grid">
                 <div className="form-field">
-                  <label htmlFor="jobTitle">
-                    Job title / Role
-                  </label>
-
+                  <label htmlFor="jobTitle">Job title / Role</label>
                   <input
                     id="jobTitle"
                     {...inputProps('jobTitle')}
@@ -240,7 +247,6 @@ const handleContinue = (event) => {
 
                 <div className="form-field">
                   <label htmlFor="company">Company</label>
-
                   <input
                     id="company"
                     {...inputProps('company')}
@@ -252,14 +258,12 @@ const handleContinue = (event) => {
                   <label htmlFor="experience">
                     Responsibilities and achievements
                   </label>
-
                   <textarea
                     id="experience"
                     {...inputProps('experience')}
                     rows="4"
                     placeholder="Describe your work, projects, or internship..."
                   />
-
                   <span className="field-hint">
                     No experience yet? You can leave this blank.
                   </span>
@@ -271,31 +275,23 @@ const handleContinue = (event) => {
               <div className="form-grid">
                 <div className="form-field full-width">
                   <label htmlFor="skills">Your skills</label>
-
                   <textarea
                     id="skills"
                     {...inputProps('skills')}
                     rows="5"
                     placeholder="e.g. HTML, CSS, JavaScript, C++, Communication"
                   />
-
-                  <span className="field-hint">
-                    Separate skills with commas.
-                  </span>
+                  <span className="field-hint">Separate skills with commas.</span>
                 </div>
 
                 <div className="form-field full-width">
-                  <label htmlFor="jobDescription">
-                    Target Job Description
-                  </label>
-
+                  <label htmlFor="jobDescription">Target Job Description</label>
                   <textarea
                     id="jobDescription"
                     {...inputProps('jobDescription')}
                     rows="6"
                     placeholder="Paste the target job description here, including required skills, qualifications, and responsibilities..."
                   />
-
                   <span className="field-hint">
                     Paste the job description you want to compare
                     with your resume for ATS compatibility scoring.
@@ -306,7 +302,7 @@ const handleContinue = (event) => {
 
             <div className="form-actions">
               <span className="save-note">
-                Your resume details are not saved yet.
+                {saveMessage || saveError || 'Your resume details are not saved yet.'}
               </span>
 
               <div className="builder-navigation">
@@ -315,25 +311,21 @@ const handleContinue = (event) => {
                     type="button"
                     className="continue-button"
                     onClick={handleBack}
+                    disabled={saving}
                   >
                     ← Back
                   </button>
                 )}
 
-                <button
-                  type="submit"
-                  className="continue-button"
-                >
+                <button type="submit" className="continue-button" disabled={saving}>
                   {step < 4 ? (
                     <>
                       Continue to{' '}
-                      {step === 1
-                        ? 'Education'
-                        : step === 2
-                          ? 'Experience'
-                          : 'Skills'}
+                      {step === 1 ? 'Education' : step === 2 ? 'Experience' : 'Skills'}
                       <span> →</span>
                     </>
+                  ) : saving ? (
+                    'Saving...'
                   ) : (
                     <>
                       Finish <span>✓</span>
@@ -345,9 +337,8 @@ const handleContinue = (event) => {
 
             {step === 4 && (
               <p className="form-description">
-                Your resume details and target job description
-                are collected in this form. ATS scoring, results,
-                PDF export, and permanent saving are not
+                Your resume details and target job description are collected
+                in this form. ATS scoring, results, and PDF export are not
                 implemented yet.
               </p>
             )}

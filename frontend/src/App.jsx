@@ -5,6 +5,7 @@ import DashboardLayout from './DashboardLayout'
 import HomePage from './HomePage'
 import AuthPage from './AuthPage'
 import ProtectedRoute from './ProtectedRoute'
+import MyResumes from './MyResumes'
 function PlaceholderPage({ title }) {
   return (
     <div>
@@ -33,7 +34,7 @@ function App() {
           >
           <Route index element={<HomePage />} />
           <Route path="analyser" element={<PlaceholderPage title="Resume Analyser" />} />
-          <Route path="resumes" element={<PlaceholderPage title="My Resumes" />} />
+          <Route path="resumes" element={<MyResumes />} />
           <Route path="profile" element={<PlaceholderPage title="Profile" />} />
           <Route path="help" element={<PlaceholderPage title="Help" />} />
         </Route>

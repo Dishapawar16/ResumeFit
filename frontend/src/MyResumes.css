@@ -1,0 +1,120 @@
+.myresumes {
+  max-width: 760px;
+  color: #24372d;
+}
+
+.myresumes-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.myresumes-head h1 {
+  margin: 0 0 6px;
+  color: #244b38;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 32px;
+  font-weight: 500;
+}
+
+.myresumes-head p {
+  margin: 0;
+  color: #777d72;
+  font-size: 13px;
+}
+
+.myresumes-new {
+  display: inline-block;
+  padding: 11px 16px;
+  border-radius: 4px;
+  color: #fffef9;
+  background: #244b38;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.myresumes-new:hover {
+  background: #183a29;
+}
+
+.myresumes-note {
+  color: #777d72;
+  font-size: 13px;
+}
+
+.myresumes-error {
+  margin: 0 0 18px;
+  padding: 11px 13px;
+  border-radius: 4px;
+  color: #8a2f2f;
+  background: #f8e9e6;
+  font-size: 12px;
+}
+
+.myresumes-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 28px;
+  border: 1px dashed #dedfd3;
+  border-radius: 8px;
+  background: #fffef9;
+  color: #777d72;
+  font-size: 13px;
+}
+
+.myresumes-empty p {
+  margin: 0;
+}
+
+.myresumes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.myresumes-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid #e7e7dc;
+  border-radius: 8px;
+  background: #fffef9;
+}
+
+.myresumes-title {
+  display: block;
+  color: #244b38;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.myresumes-date {
+  display: block;
+  margin-top: 4px;
+  color: #929487;
+  font-size: 11px;
+}
+
+.myresumes-delete {
+  padding: 9px 14px;
+  border: 1px solid #e3c9c4;
+  border-radius: 4px;
+  background: transparent;
+  color: #8a2f2f;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.myresumes-delete:hover {
+  background: #f8e9e6;
+}
